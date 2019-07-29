@@ -2,6 +2,7 @@ package btc
 
 import (
 	"crypto/ecdsa"
+	"encoding/hex"
 	"fmt"
 
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
@@ -40,9 +41,9 @@ func NewKey(mnemonic, path string, version BlockchainVersion, addrVersion Addres
 func (k *Key) Address() (string, error) {
 	switch k.addrVersion {
 	case BIP44:
-		return k.newAddressPubKeyHash()
+		return k.newAddressPubKeyHash(k.PublicKeyBytes())
 	case BIP49:
-		return k.newAddressScriptHash()
+		return k.newAddressScriptHash(k.PublicKeyBytes())
 	default:
 		return "", fmt.Errorf("unexpected address version")
 	}
@@ -50,7 +51,13 @@ func (k *Key) Address() (string, error) {
 
 func (k *Key) PrivateKeyString() (string, error) { return "", nil }
 func (k *Key) PrivateKeyBytes() ([]byte, error)  { return nil, nil }
-func (k *Key) PublicKeyString() (string, error)  { return "", nil }
+func (k *Key) PublicKeyString() (string, error) {
+	pubKey := k.PrivateKey.PublicKey
+	pubKeyBytes := ethCrypto.CompressPubkey(&pubKey)
+	pubKeyString := hex.EncodeToString(pubKeyBytes)
+
+	return pubKeyString, nil
+}
 
 func (k *Key) PublicKeyBytes() []byte {
 	pubKey := k.PublicKey

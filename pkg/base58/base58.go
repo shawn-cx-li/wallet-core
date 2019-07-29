@@ -1,7 +1,10 @@
 package base58
 
 import (
+	"bytes"
+	"fmt"
 	"math/big"
+	"strings"
 
 	"github.com/shawn-cx-li/wallet-core/pkg/utils"
 )
@@ -9,7 +12,50 @@ import (
 var bigRadix = big.NewInt(58)
 var bigZero = big.NewInt(0)
 
-func Base58Encode(b []byte, alphabet string) string {
+// Decode decodes a modified base58 string to a byte slice and checks checksum.
+func Decode(b, alphabet string) ([]byte, error) {
+	if len(b) < 5 {
+		return nil, fmt.Errorf("Base58 string too short: %s", b)
+	}
+	answer := big.NewInt(0)
+	j := big.NewInt(1)
+
+	for i := len(b) - 1; i >= 0; i-- {
+		tmp := strings.IndexAny(alphabet, string(b[i]))
+		if tmp == -1 {
+			return nil, fmt.Errorf("Bad Base58 string: %s", b)
+		}
+		idx := big.NewInt(int64(tmp))
+		tmp1 := big.NewInt(0)
+		tmp1.Mul(j, idx)
+
+		answer.Add(answer, tmp1)
+		j.Mul(j, bigRadix)
+	}
+
+	tmpval := answer.Bytes()
+
+	var numZeros int
+	for numZeros = 0; numZeros < len(b); numZeros++ {
+		if b[numZeros] != alphabet[0] {
+			break
+		}
+	}
+	flen := numZeros + len(tmpval)
+	val := make([]byte, flen, flen)
+	copy(val[numZeros:], tmpval)
+
+	// Check checksum
+	checksum := utils.DoubleSha256(val[0 : len(val)-4])
+	expected := val[len(val)-4:]
+	if !bytes.Equal(checksum[0:4], expected) {
+		return nil, fmt.Errorf("Bad Base58 checksum: %v expected %v", checksum, expected)
+	}
+	return val, nil
+}
+
+// Encode encodes a byte slice to a modified base58 string.
+func Encode(b []byte, alphabet string) string {
 	checksum := utils.DoubleSha256(b)
 	b = append(b, checksum[0:4]...)
 	x := new(big.Int)

@@ -38,7 +38,7 @@ func (k *Key) Address() (string, error) {
 		return "", err
 	}
 
-	return base58.Base58Encode(h, ALPHABET), nil
+	return base58.Encode(h, ALPHABET), nil
 }
 
 func (k *Key) PrivateKeyString() (string, error) { return "", nil }

@@ -8,7 +8,7 @@ const (
 	Mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 )
 
-type TestCase struct {
+type testCase struct {
 	Name            string
 	Mnemonic        string
 	Path            string
@@ -20,8 +20,8 @@ type TestCase struct {
 	ExpectedPrivKey string
 }
 
-func PrepareTestCases(t *testing.T) []TestCase {
-	test := []TestCase{
+func PrepareTestCases(t *testing.T) []testCase {
+	test := []testCase{
 		{
 			"bitcoin mainnet bip44",
 			Mnemonic,
@@ -81,7 +81,7 @@ func PrepareTestCases(t *testing.T) []TestCase {
 	return test
 }
 
-func TestGenerateAddress(t *testing.T) {
+func TestNewKey(t *testing.T) {
 	tests := PrepareTestCases(t)
 
 	for _, c := range tests {
@@ -93,12 +93,20 @@ func TestGenerateAddress(t *testing.T) {
 			continue
 		}
 
-		addr, err := key.Address()
-		if err != nil {
-			t.Errorf("unexpected case %s, err: %s ", c.Name, err)
+		k, ok := key.(*Key)
+		if !ok {
+			t.Error("failed to convert key from interface into local stub")
 		}
-		if addr != c.ExpectedAddress {
-			t.Errorf("unexpected case %s, address %s, expect %s", c.Name, addr, c.ExpectedAddress)
-		}
+		GetAddressTest(t, &c, k)
+	}
+}
+
+func GetAddressTest(t *testing.T, c *testCase, k *Key) {
+	addr, err := k.Address()
+	if err != nil {
+		t.Errorf("unexpected case %s, err: %s ", c.Name, err)
+	}
+	if addr != c.ExpectedAddress {
+		t.Errorf("unexpected case %s, address %s, expect %s", c.Name, addr, c.ExpectedAddress)
 	}
 }

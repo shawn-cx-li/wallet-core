@@ -3,20 +3,18 @@ package btc
 import (
 	"github.com/shawn-cx-li/wallet-core/pkg/utils"
 
-	base58x "github.com/shawn-cx-li/wallet-core/pkg/base58"
+	base58 "github.com/shawn-cx-li/wallet-core/pkg/base58"
 )
 
-func (k *Key) newAddressPubKeyHash() (string, error) {
-	pubKeyByte := k.PublicKeyBytes()
+func (k *Key) newAddressPubKeyHash(pubKeyByte []byte) (string, error) {
 
 	accountID := utils.Sha256RipeMD160(pubKeyByte)
 	h := append([]byte{Params[k.version].PubKeyHashAddrID}, accountID...)
 
-	return base58x.Base58Encode(h, ALPHABET), nil
+	return base58.Encode(h, ALPHABET), nil
 }
 
-func (k *Key) newAddressScriptHash() (string, error) {
-	pubKeyByte := k.PublicKeyBytes()
+func (k *Key) newAddressScriptHash(pubKeyByte []byte) (string, error) {
 
 	accountID := utils.Sha256RipeMD160(pubKeyByte)
 
@@ -25,5 +23,5 @@ func (k *Key) newAddressScriptHash() (string, error) {
 
 	h := append([]byte{Params[k.version].ScriptHashAddrID}, keyHash...)
 
-	return base58x.Base58Encode(h, ALPHABET), nil
+	return base58.Encode(h, ALPHABET), nil
 }
