@@ -9,7 +9,7 @@ import (
 func (k *Key) newAddressPubKeyHash(pubKeyByte []byte) (string, error) {
 
 	accountID := utils.Sha256RipeMD160(pubKeyByte)
-	h := append([]byte{Params[k.version].PubKeyHashAddrID}, accountID...)
+	h := append([]byte{Params[k.opts.version].PubKeyHashAddrID}, accountID...)
 
 	return base58.Encode(h, ALPHABET), nil
 }
@@ -21,7 +21,7 @@ func (k *Key) newAddressScriptHash(pubKeyByte []byte) (string, error) {
 	scriptSig := append([]byte{0x00, 0x14}, accountID...)
 	keyHash := utils.Sha256RipeMD160(scriptSig)
 
-	h := append([]byte{Params[k.version].ScriptHashAddrID}, keyHash...)
+	h := append([]byte{Params[k.opts.version].ScriptHashAddrID}, keyHash...)
 
 	return base58.Encode(h, ALPHABET), nil
 }
