@@ -22,6 +22,7 @@ var Params = [...]struct {
 	PrivateKeyID     byte
 	HDPrivateKeyID   [4]byte
 	HDPublicKeyID    [4]byte
+	PrivKeyBytesLen  uint
 }{
 	BITCOIN: {
 		Name:             "bitcoin",
@@ -31,6 +32,7 @@ var Params = [...]struct {
 		PrivateKeyID:     0x80,                            // starts with 5 (uncompressed) or K (compressed)
 		HDPrivateKeyID:   [4]byte{0x04, 0x88, 0xad, 0xe4}, // starts with xprv
 		HDPublicKeyID:    [4]byte{0x04, 0x88, 0xb2, 0x1e}, // starts with xpub
+		PrivKeyBytesLen:  32,
 	},
 	BITCOIN_TESTNET: {
 		Name:             "bitcoin_testnet",
@@ -40,6 +42,7 @@ var Params = [...]struct {
 		PrivateKeyID:     0xef,
 		HDPrivateKeyID:   [4]byte{0x04, 0x35, 0x83, 0x94},
 		HDPublicKeyID:    [4]byte{0x04, 0x35, 0x87, 0xcf},
+		PrivKeyBytesLen:  32,
 	},
 	DASH: {
 		Name:             "dash",
@@ -49,5 +52,6 @@ var Params = [...]struct {
 		PrivateKeyID:     0xcc,
 		HDPrivateKeyID:   [4]byte{0x04, 0x88, 0xb2, 0x1e},
 		HDPublicKeyID:    [4]byte{0x04, 0x88, 0xad, 0xe4},
+		PrivKeyBytesLen:  32,
 	},
 }

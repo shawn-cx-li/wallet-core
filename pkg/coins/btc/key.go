@@ -51,9 +51,9 @@ func (k *Key) getPrivateKey() []byte {
 
 // PrivateKeyString returns the Wallet Import Format (WIF)
 func (k *Key) PrivateKeyString() (string, error) {
-
 	return k.WifString(), nil
 }
+
 func (k *Key) PrivateKeyBytes() ([]byte, error) {
 	return k.getPrivateKey(), nil
 }

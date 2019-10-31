@@ -9,13 +9,6 @@ import (
 	"github.com/shawn-cx-li/wallet-core/pkg/utils"
 )
 
-// c := "e284129cc0922579a535bbf4d1a3b25773090d28c909bc0fed73b5e0222cc372"
-// b, _ := hex.DecodeString(c)
-
-// s := "L4p2b9VAf8k5aUahF1JCJUzZkgNEAqLfq8DDdQiyAprQAKSbu8hf"
-// b, _ := base58.Decode(s, btc.ALPHABET)
-// fmt.Println(hex.EncodeToString(b[1 : len(b)-5]))
-
 var bigRadix = big.NewInt(58)
 var bigZero = big.NewInt(0)
 
@@ -61,7 +54,7 @@ func Decode(b, alphabet string) ([]byte, error) {
 	return val, nil
 }
 
-// Encode encodes a byte slice to a modified base58 string.
+// Encode appends checksum to a byte slice and encodes to a modified base58 string.
 func Encode(b []byte, alphabet string) string {
 	checksum := utils.DoubleSha256(b)
 	b = append(b, checksum[0:4]...)
