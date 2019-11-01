@@ -1,4 +1,4 @@
-package ripple
+package eth
 
 import (
 	"testing"
@@ -21,13 +21,13 @@ type testCase struct {
 func PrepareTestCases(t *testing.T) []testCase {
 	test := []testCase{
 		{
-			"ripple mainnet bip44",
+			"bitcoin mainnet bip44",
 			Mnemonic,
-			"m/44'/144'/0'/0/0",
+			"m/44'/60'/0'/0/0",
 			false,
-			"rHsMGQEkVNJmpGWs8XUBoTBiAAbwxZN5v3",
-			"031d68bc1a142e6766b2bdfb006ccfe135ef2e0e2e94abb5cf5c9ab6104776fbae",
-			"90802a50aa84efb6cdb225f17c27616ea94048c179142fecf03f4712a07ea7a4",
+			"0x9858EfFD232B4033E47d90003D41EC34EcaEda94",
+			"0x0237b0bb7a8288d38ed49a524b5dc98cff3eb5ca824c9f9dc0dfdb3d9cd600f299",
+			"0x1ab42cc412b618bdea3a599e3c9bae199ebf030895b039e9db1e30dafb12b727",
 		},
 	}
 	return test
@@ -37,7 +37,8 @@ func TestNewKey(t *testing.T) {
 	tests := PrepareTestCases(t)
 
 	for _, c := range tests {
-		key, err := NewKey(c.Mnemonic, c.Path, Opts{})
+		opts := Opts{}
+		key, err := NewKey(c.Mnemonic, c.Path, opts)
 		if err != nil {
 			if !c.ExpectErr {
 				t.Errorf("unexpected case %s, err: %s", c.Name, err)

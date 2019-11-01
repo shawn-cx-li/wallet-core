@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/shawn-cx-li/wallet-core/pkg/base58"
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/btc"
-	"github.com/shawn-cx-li/wallet-core/pkg/coins/eth"
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/ripple"
 	log "github.com/sirupsen/logrus"
 )
@@ -58,9 +57,4 @@ func demo_bch() {
 	pubKey, _ := key.PublicKeyString()
 	log.Info("bch address: ", addr)
 	log.Info("bch public key: ", pubKey)
-}
-
-func demo_eth() {
-	addr, _ := eth.GenerateAddress(mnemonic, ethPath, "")
-	log.Info("address: ", addr)
 }

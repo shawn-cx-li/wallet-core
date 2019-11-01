@@ -1,9 +1,8 @@
-package btc
+package eth
 
 import (
 	"crypto/ecdsa"
 	"encoding/hex"
-	"fmt"
 
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/shawn-cx-li/wallet-core/pkg/crypto"
@@ -15,6 +14,8 @@ type Key struct {
 	path     string
 	opts     Opts
 }
+
+type Opts struct{}
 
 func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
 	seed, err := crypto.RecoverSeed(mnemonic, "")
@@ -35,19 +36,12 @@ func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
 }
 
 func (k *Key) Address() (string, error) {
-	switch k.opts.addrVersion {
-	case BIP44:
-		return k.newAddressPubKeyHash(k.PublicKeyBytes())
-	case BIP49:
-		return k.newAddressScriptHash(k.PublicKeyBytes())
-	default:
-		return "", fmt.Errorf("unexpected address version")
-	}
+	return ethCrypto.PubkeyToAddress(k.PublicKey).String(), nil
 }
 
 // PrivateKeyString returns the Wallet Import Format (WIF)
 func (k *Key) PrivateKeyString() (string, error) {
-	return k.WifString(), nil
+	return "0x" + hex.EncodeToString(k.getPrivateKey()), nil
 }
 
 func (k *Key) PrivateKeyBytes() ([]byte, error) {
@@ -55,7 +49,7 @@ func (k *Key) PrivateKeyBytes() ([]byte, error) {
 }
 
 func (k *Key) PublicKeyString() (string, error) {
-	return hex.EncodeToString(k.getPublicKey()), nil
+	return "0x" + hex.EncodeToString(k.getPublicKey()), nil
 }
 
 func (k *Key) PublicKeyBytes() []byte {

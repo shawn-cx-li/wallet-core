@@ -43,14 +43,24 @@ func (k *Key) Address() (string, error) {
 }
 
 func (k *Key) PrivateKeyString() (string, error) {
-	keyBytes := k.PrivateKey.D.Bytes()
-	return hex.EncodeToString(keyBytes), nil
+	return hex.EncodeToString(k.getPrivateKey()), nil
 }
 
-func (k *Key) PrivateKeyBytes() ([]byte, error) { return nil, nil }
-func (k *Key) PublicKeyString() (string, error) { return "", nil }
+func (k *Key) PrivateKeyBytes() ([]byte, error) {
+	return k.getPrivateKey(), nil
+}
+func (k *Key) PublicKeyString() (string, error) {
+	return hex.EncodeToString(k.getPublicKey()), nil
+}
 
 func (k *Key) PublicKeyBytes() []byte {
-	pubKey := k.PublicKey
-	return ethCrypto.CompressPubkey(&pubKey)
+	return k.getPublicKey()
+}
+
+func (k *Key) getPrivateKey() []byte {
+	return ethCrypto.FromECDSA(k.PrivateKey)
+}
+
+func (k *Key) getPublicKey() []byte {
+	return ethCrypto.CompressPubkey(&k.PublicKey)
 }
