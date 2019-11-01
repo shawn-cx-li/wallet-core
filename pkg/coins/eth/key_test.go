@@ -49,6 +49,7 @@ func TestNewKey(t *testing.T) {
 		GetAddressTest(t, &c, key)
 		GetPublicKeyTest(t, &c, key)
 		GetPrivateKeyTest(t, &c, key)
+		ImportKeyTest(t, &c, key)
 	}
 }
 
@@ -63,21 +64,32 @@ func GetAddressTest(t *testing.T, c *testCase, k *Key) {
 }
 
 func GetPublicKeyTest(t *testing.T, c *testCase, k *Key) {
-	pubKey, err := k.PublicKeyString()
-	if err != nil {
-		t.Errorf("unexpected case %s on PublicKeyString(), err: %s", c.Name, err)
-	}
+	pubKey := k.PublicKeyString()
+
 	if pubKey != c.ExpectedPubKey {
 		t.Errorf("unexpected case %s, pubKey: %s, expect: %s", c.Name, pubKey, c.ExpectedPubKey)
 	}
 }
 
 func GetPrivateKeyTest(t *testing.T, c *testCase, k *Key) {
-	privKey, err := k.PrivateKeyString()
-	if err != nil {
-		t.Errorf("unexpected case %s on PrivateKeyString(), err: %s", c.Name, err)
-	}
+	privKey := k.PrivateKeyString()
+
 	if privKey != c.ExpectedPrivKey {
 		t.Errorf("unexpected case %s, privKey: %s, expect: %s", c.Name, privKey, c.ExpectedPrivKey)
+	}
+}
+
+func ImportKeyTest(t *testing.T, c *testCase, k *Key) {
+	importedKey, err := ImportKey(k.PrivateKeyString(), Opts{})
+	if err != nil {
+		t.Errorf("unable to import key from %s", k.PrivateKeyString())
+	}
+
+	if importedKey.PrivateKeyString() != k.PrivateKeyString() {
+		t.Errorf("unexpected private key from imported secret, expect %s, got %s", k.PrivateKeyString(), importedKey.PrivateKeyString())
+	}
+
+	if importedKey.PublicKeyString() != k.PublicKeyString() {
+		t.Errorf("unexpected public key from imported secret, expect %s, got %s", k.PublicKeyString(), importedKey.PublicKeyString())
 	}
 }

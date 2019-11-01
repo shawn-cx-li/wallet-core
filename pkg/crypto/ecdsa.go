@@ -7,6 +7,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil/hdkeychain"
 	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/crypto"
 	bip39 "github.com/tyler-smith/go-bip39"
 )
 
@@ -76,4 +77,21 @@ func GetPrivateKey(seed string, path string) (*ecdsa.PrivateKey, string, error) 
 	privateKeyECDSA := privateKey.ToECDSA()
 
 	return privateKeyECDSA, path, nil
+}
+
+func BytesToECDSA(b []byte) (*ecdsa.PrivateKey, error) {
+	return bytesToECDSA(b)
+}
+
+func StringToECDSA(s string) (*ecdsa.PrivateKey, error) {
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytesToECDSA(b)
+}
+
+func bytesToECDSA(b []byte) (*ecdsa.PrivateKey, error) {
+	return crypto.ToECDSA(b)
 }

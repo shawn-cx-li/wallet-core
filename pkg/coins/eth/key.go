@@ -3,6 +3,7 @@ package eth
 import (
 	"crypto/ecdsa"
 	"encoding/hex"
+	"fmt"
 
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/shawn-cx-li/wallet-core/pkg/crypto"
@@ -10,12 +11,8 @@ import (
 
 type Key struct {
 	*ecdsa.PrivateKey
-	mnemonic string
-	path     string
-	opts     Opts
+	opts Opts
 }
-
-type Opts struct{}
 
 func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
 	seed, err := crypto.RecoverSeed(mnemonic, "")
@@ -26,11 +23,34 @@ func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
 	if err != nil {
 		return nil, err
 	}
+	if ValidateOpts(opts) != nil {
+		return nil, ValidateOpts(opts)
+	}
 
 	return &Key{
 		privKey,
-		mnemonic,
-		path,
+		opts,
+	}, nil
+}
+
+// ImportKey converts a secret string to a Key
+func ImportKey(privKey string, opts Opts) (*Key, error) {
+	if hasHexPrefix(privKey) {
+		privKey = privKey[2:]
+	}
+	if !isHex(privKey) {
+		return nil, fmt.Errorf("invalid private key %s", privKey)
+	}
+	if ValidateOpts(opts) != nil {
+		return nil, ValidateOpts(opts)
+	}
+	key, err := crypto.StringToECDSA(privKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Key{
+		key,
 		opts,
 	}, nil
 }
@@ -40,26 +60,26 @@ func (k *Key) Address() (string, error) {
 }
 
 // PrivateKeyString returns the Wallet Import Format (WIF)
-func (k *Key) PrivateKeyString() (string, error) {
-	return "0x" + hex.EncodeToString(k.getPrivateKey()), nil
+func (k *Key) PrivateKeyString() string {
+	return "0x" + hex.EncodeToString(k.privateKey())
 }
 
-func (k *Key) PrivateKeyBytes() ([]byte, error) {
-	return k.getPrivateKey(), nil
+func (k *Key) PrivateKeyBytes() []byte {
+	return k.privateKey()
 }
 
-func (k *Key) PublicKeyString() (string, error) {
-	return "0x" + hex.EncodeToString(k.getPublicKey()), nil
+func (k *Key) PublicKeyString() string {
+	return "0x" + hex.EncodeToString(k.publicKey())
 }
 
 func (k *Key) PublicKeyBytes() []byte {
-	return k.getPublicKey()
+	return k.publicKey()
 }
 
-func (k *Key) getPrivateKey() []byte {
+func (k *Key) privateKey() []byte {
 	return ethCrypto.FromECDSA(k.PrivateKey)
 }
 
-func (k *Key) getPublicKey() []byte {
+func (k *Key) publicKey() []byte {
 	return ethCrypto.CompressPubkey(&k.PublicKey)
 }

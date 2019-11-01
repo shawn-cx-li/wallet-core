@@ -111,20 +111,16 @@ func GetAddressTest(t *testing.T, c *testCase, k *Key) {
 }
 
 func GetPublicKeyTest(t *testing.T, c *testCase, k *Key) {
-	pubKey, err := k.PublicKeyString()
-	if err != nil {
-		t.Errorf("unexpected case %s on PublicKeyString(), err: %s", c.Name, err)
-	}
+	pubKey := k.PublicKeyString()
+
 	if pubKey != c.ExpectedPubKey {
 		t.Errorf("unexpected case %s, pubKey: %s, expect: %s", c.Name, pubKey, c.ExpectedPubKey)
 	}
 }
 
 func GetPrivateKeyTest(t *testing.T, c *testCase, k *Key) {
-	privKey, err := k.PrivateKeyString()
-	if err != nil {
-		t.Errorf("unexpected case %s on PrivateKeyString(), err: %s", c.Name, err)
-	}
+	privKey := k.PrivateKeyString()
+
 	if privKey != c.ExpectedPrivKey {
 		t.Errorf("unexpected case %s, privKey: %s, expect: %s", c.Name, privKey, c.ExpectedPrivKey)
 	}

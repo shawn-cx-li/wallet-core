@@ -16,7 +16,7 @@ func main() {
 
 	key, _ := eth.NewKey(mnemonic, path, eth.Opts{})
 
-	privKey, _ := key.PrivateKeyString()
+	privKey := key.PrivateKeyString()
 	log.Infof("privKey: %s", privKey)
 
 	addr, _ := key.Address()

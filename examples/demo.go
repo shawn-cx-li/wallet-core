@@ -21,10 +21,8 @@ const (
 func demo_ripple() {
 	key, _ := ripple.NewKey(mnemonic, ripplePath, ripple.Opts{})
 	addr, _ := key.Address()
-	priv, err := key.PrivateKeyString()
-	if err != nil {
-		log.Error(err)
-	}
+	priv := key.PrivateKeyString()
+
 	log.Info("ripple address: ", addr)
 	log.Info("ripple privatekey: ", priv)
 }
@@ -32,7 +30,7 @@ func demo_ripple() {
 func demo_btc() {
 	key, _ := btc.NewKey(mnemonic, btcBIP44Path, btc.NewOpts(btc.BITCOIN, btc.BIP44))
 	addr, _ := key.Address()
-	pubKey, _ := key.PublicKeyString()
+	pubKey := key.PublicKeyString()
 	log.Info("btc address: ", addr)
 	log.Info("btc public key: ", pubKey)
 	d, _ := base58.Decode(addr, btc.ALPHABET)
@@ -54,7 +52,7 @@ func demo_dash() {
 func demo_bch() {
 	key, _ := btc.NewKey(mnemonic, "m/44'/145'/0'/0/0", btc.NewOpts(btc.BITCOIN, btc.BIP44))
 	addr, _ := key.Address()
-	pubKey, _ := key.PublicKeyString()
+	pubKey := key.PublicKeyString()
 	log.Info("bch address: ", addr)
 	log.Info("bch public key: ", pubKey)
 }

@@ -46,26 +46,26 @@ func (k *Key) Address() (string, error) {
 }
 
 // PrivateKeyString returns the Wallet Import Format (WIF)
-func (k *Key) PrivateKeyString() (string, error) {
-	return k.WifString(), nil
+func (k *Key) PrivateKeyString() string {
+	return k.WifString()
 }
 
-func (k *Key) PrivateKeyBytes() ([]byte, error) {
-	return k.getPrivateKey(), nil
+func (k *Key) PrivateKeyBytes() []byte {
+	return k.privateKey()
 }
 
-func (k *Key) PublicKeyString() (string, error) {
-	return hex.EncodeToString(k.getPublicKey()), nil
+func (k *Key) PublicKeyString() string {
+	return hex.EncodeToString(k.publicKey())
 }
 
 func (k *Key) PublicKeyBytes() []byte {
-	return k.getPublicKey()
+	return k.publicKey()
 }
 
-func (k *Key) getPrivateKey() []byte {
+func (k *Key) privateKey() []byte {
 	return ethCrypto.FromECDSA(k.PrivateKey)
 }
 
-func (k *Key) getPublicKey() []byte {
+func (k *Key) publicKey() []byte {
 	return ethCrypto.CompressPubkey(&k.PublicKey)
 }
