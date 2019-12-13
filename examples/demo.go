@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/shawn-cx-li/wallet-core/pkg/base58"
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/btc"
+	"github.com/shawn-cx-li/wallet-core/pkg/coins/eth"
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/ripple"
 	log "github.com/sirupsen/logrus"
 )
@@ -18,41 +18,51 @@ const (
 	dashPath         = "m/44'/5'/0'/0/0"
 )
 
-func demo_ripple() {
-	key, _ := ripple.NewKey(mnemonic, ripplePath, ripple.Opts{})
-	addr, _ := key.Address()
-	priv := key.PrivateKeyString()
-
-	log.Info("ripple address: ", addr)
-	log.Info("ripple privatekey: ", priv)
-}
-
 func demo_btc() {
 	key, _ := btc.NewKey(mnemonic, btcBIP44Path, btc.NewOpts(btc.BITCOIN, btc.BIP44))
-	addr, _ := key.Address()
+	privKey := key.PrivateKeyString()
 	pubKey := key.PublicKeyString()
-	log.Info("btc address: ", addr)
+	addr, _ := key.Address()
+	log.Info("btc private key: ", privKey)
 	log.Info("btc public key: ", pubKey)
-	d, _ := base58.Decode(addr, btc.ALPHABET)
-	log.Info("after: ", d)
+	log.Info("btc address: ", addr)
 }
 
 func demo_btc_testnet() {
 	key, _ := btc.NewKey(mnemonic, btcBIP49TESTPath, btc.NewOpts(btc.BITCOIN_TESTNET, btc.BIP49))
+	privKey := key.PrivateKeyString()
+	pubKey := key.PublicKeyString()
 	addr, _ := key.Address()
+	log.Info("btc testnet private key: ", privKey)
+	log.Info("btc testnet public key: ", pubKey)
 	log.Info("btc testnet address: ", addr)
 }
 
 func demo_dash() {
 	key, _ := btc.NewKey(mnemonic, dashPath, btc.NewOpts(btc.DASH, btc.BIP44))
+	privKey := key.PrivateKeyString()
+	pubKey := key.PublicKeyString()
 	addr, _ := key.Address()
+	log.Info("dash private key: ", privKey)
+	log.Info("dash public key: ", pubKey)
 	log.Info("dash address: ", addr)
 }
 
-func demo_bch() {
-	key, _ := btc.NewKey(mnemonic, "m/44'/145'/0'/0/0", btc.NewOpts(btc.BITCOIN, btc.BIP44))
-	addr, _ := key.Address()
+func demo_eth() {
+	key, _ := eth.NewKey(mnemonic, ethPath, eth.Opts{})
+	privKey := key.PrivateKeyString()
 	pubKey := key.PublicKeyString()
-	log.Info("bch address: ", addr)
-	log.Info("bch public key: ", pubKey)
+	addr, _ := key.Address()
+	log.Info("eth private key: ", privKey)
+	log.Info("eth public key: ", pubKey)
+	log.Info("eth address: ", addr)
+}
+
+func demo_ripple() {
+	key, _ := ripple.NewKey(mnemonic, ripplePath, ripple.Opts{})
+	priv := key.PrivateKeyString()
+	addr, _ := key.Address()
+
+	log.Info("ripple privatekey: ", priv)
+	log.Info("ripple address: ", addr)
 }
