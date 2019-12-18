@@ -2,7 +2,7 @@
 This project is aimed to provide a universal HD wallet derivation. Use a single mnemonic to generate private/public key pair and address for various Blockchains.
 
 ### Examples
-Examples can be found in [examples](https://github.com/shawn-cx-li/wallet-core/tree/master/pkg/examples/demo.go)
+Examples can be found in [examples](https://github.com/shawn-cx-li/wallet-core/blob/master/examples/demo.go)
 
 ### Sample Result
 To derive private key, public key and address from mnemonic `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` for bitcoin BIP44 specifics
