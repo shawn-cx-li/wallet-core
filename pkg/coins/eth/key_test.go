@@ -18,7 +18,7 @@ type testCase struct {
 	ExpectedPrivKey string
 }
 
-func PrepareTestCases(t *testing.T) []testCase {
+func prepareTestCases(t *testing.T) []testCase {
 	test := []testCase{
 		{
 			"bitcoin mainnet bip44",
@@ -34,7 +34,7 @@ func PrepareTestCases(t *testing.T) []testCase {
 }
 
 func TestNewKey(t *testing.T) {
-	tests := PrepareTestCases(t)
+	tests := prepareTestCases(t)
 
 	for _, c := range tests {
 		opts := Opts{}
