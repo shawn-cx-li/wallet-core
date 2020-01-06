@@ -37,7 +37,7 @@ func TestNewKey(t *testing.T) {
 	tests := prepareTestCases(t)
 
 	for _, c := range tests {
-		key, err := NewKey(c.Mnemonic, c.Path, Opts{})
+		key, err := newKey(c.Mnemonic, c.Path, Opts{})
 		if err != nil {
 			if !c.ExpectErr {
 				t.Errorf("unexpected case %s, err: %s", c.Name, err)

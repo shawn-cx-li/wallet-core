@@ -10,8 +10,8 @@ const (
 	BITCOIN_TESTNET BlockchainVersion = 1
 	DASH            BlockchainVersion = 2
 
-	BIP44 AddressVersion = 0
-	BIP49 AddressVersion = 1
+	BIP44 AddressVersion = 0 // P2PKH (pay-to-public-key-hash) or Legacy
+	BIP49 AddressVersion = 1 // P2SH (pay-to-script-hash)
 )
 
 var Params = [...]struct {

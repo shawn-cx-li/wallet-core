@@ -9,6 +9,7 @@ import (
 
 	"github.com/shawn-cx-li/wallet-core/pkg/base58"
 	"github.com/shawn-cx-li/wallet-core/pkg/crypto"
+	"github.com/shawn-cx-li/wallet-core/pkg/interfaces"
 	"github.com/shawn-cx-li/wallet-core/pkg/utils"
 )
 
@@ -17,7 +18,11 @@ type Key struct {
 	*ecdsa.PrivateKey
 }
 
-func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
+func NewKey(mnemonic, path string, opts Opts) (interfaces.Key, error) {
+	return newKey(mnemonic, path, opts)
+}
+
+func newKey(mnemonic, path string, opts Opts) (*Key, error) {
 	seed, err := crypto.RecoverSeed(mnemonic, "")
 	if err != nil {
 		return nil, err

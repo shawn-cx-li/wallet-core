@@ -7,6 +7,7 @@ import (
 
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/shawn-cx-li/wallet-core/pkg/crypto"
+	"github.com/shawn-cx-li/wallet-core/pkg/interfaces"
 )
 
 type Key struct {
@@ -16,7 +17,11 @@ type Key struct {
 	opts     Opts
 }
 
-func NewKey(mnemonic, path string, opts Opts) (*Key, error) {
+func NewKey(mnemonic, path string, opts Opts) (interfaces.Key, error) {
+	return newKey(mnemonic, path, opts)
+}
+
+func newKey(mnemonic, path string, opts Opts) (*Key, error) {
 	seed, err := crypto.RecoverSeed(mnemonic, "")
 	if err != nil {
 		return nil, err
