@@ -1,2 +1,4 @@
 .DS_Store
 coverage.out
+config.yml
+config.yaml

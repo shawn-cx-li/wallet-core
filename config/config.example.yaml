@@ -1,0 +1,4 @@
+wallet:
+  mnemonic: abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+  path: m/44'/0'/0'/0/0
+family: btc-bip44
