@@ -8,6 +8,7 @@ import (
 	"github.com/shawn-cx-li/wallet-core/pkg/interfaces"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 )
 
 const (
@@ -42,6 +43,16 @@ func getKey(mnemonic, path, family string) (key interfaces.Key, err error) {
 
 func NewWallet(mnemonic, path string) (w *Wallet) {
 	return &Wallet{mnemonic, path}
+}
+
+func create(*cli.Context) {
+	conf, err := getConfig()
+	if err != nil {
+		panic(err)
+	}
+
+	wallet := NewWallet(conf.Wallet.Mnemonic, conf.Wallet.Path)
+	wallet.printKeys(conf.Family)
 }
 
 func (w *Wallet) printKeys(family string) {
