@@ -5,23 +5,12 @@ import (
 
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/btc"
 	"github.com/shawn-cx-li/wallet-core/pkg/coins/eth"
+	"github.com/shawn-cx-li/wallet-core/pkg/coins/ripple"
 	"github.com/shawn-cx-li/wallet-core/pkg/interfaces"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
-
-const (
-	ripplePath       = "m/44'/144'/0'/0/0"
-	ethPath          = "m/44'/60'/0'/0/0"
-	btcBIP44Path     = "m/44'/0'/0'/0/0"
-	btcBIP49Path     = "m/49'/0'/0'/0/0"
-	btcBIP44TESTPath = "m/44'/1'/0'/0/0"
-	btcBIP49TESTPath = "m/49'/1'/0'/0/0"
-	dashPath         = "m/44'/5'/0'/0/0"
-)
-
-var defaultPath = "m/44'/60'/0'/0/0"
 
 type Wallet struct {
 	mnemonic string
@@ -34,10 +23,17 @@ func getKey(mnemonic, path, family string) (key interfaces.Key, err error) {
 	switch family {
 	case "btc-bip44":
 		key, err = btc.NewKey(mnemonic, path, btc.NewOpts(btc.BITCOIN, btc.BIP44))
+	case "btc-bip44-test":
+		key, err = btc.NewKey(mnemonic, path, btc.NewOpts(btc.BITCOIN_TESTNET, btc.BIP44))
+	case "btc-bip49":
+		key, err = btc.NewKey(mnemonic, path, btc.NewOpts(btc.BITCOIN, btc.BIP49))
+	case "btc-bip49-test":
+		key, err = btc.NewKey(mnemonic, path, btc.NewOpts(btc.BITCOIN_TESTNET, btc.BIP49))
 	case "eth":
 		key, err = eth.NewKey(mnemonic, path, eth.Opts{})
+	case "ripple":
+		key, err = ripple.NewKey(mnemonic, path, ripple.Opts{})
 	}
-
 	return
 }
 
