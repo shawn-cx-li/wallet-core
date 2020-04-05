@@ -13,8 +13,8 @@ import (
 
 // GetNewMnemonic Generates a random mnemonic
 // A mnemonic can be used to create/recover seed
-func GetNewMnemonic() (mnemonic string, err error) {
-	entropy, err := bip39.NewEntropy(128)
+func GetNewMnemonic(size int) (mnemonic string, err error) {
+	entropy, err := bip39.NewEntropy(size)
 	if err != nil {
 		return "", err
 	}
@@ -25,7 +25,7 @@ func GetNewMnemonic() (mnemonic string, err error) {
 
 // GetNewSeed generates a random mnemonic and the deterministic seed with specified password
 func GetNewSeed(pwd string) (mnemonic, seed string, err error) {
-	mnemonic, err = GetNewMnemonic()
+	mnemonic, err = GetNewMnemonic(256)
 	if err != nil {
 		return
 	}

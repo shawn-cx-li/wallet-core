@@ -9,12 +9,61 @@ import (
 	"github.com/shawn-cx-li/wallet-core/pkg/interfaces"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
 )
 
 type Wallet struct {
-	mnemonic string
-	path     string
+	Mnemonic string
+	Path     string
+	Family   string
+}
+
+const (
+	defaultConfigFile = "./config/config.yaml"
+)
+
+var wallet Wallet
+
+func (w *Wallet) createWallet(*cli.Context) error {
+	w.printKeys()
+	return nil
+}
+
+func createWalletCmd() *cli.Command {
+	wallet = Wallet{}
+
+	var flags = []cli.Flag{
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:        "mnemonic",
+			Usage:       "mnemonic of the HD Wallet",
+			Destination: &wallet.Mnemonic,
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:        "path",
+			Usage:       "path to derive private key",
+			Destination: &wallet.Path,
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:        "family",
+			Usage:       "wallet family to create",
+			Value:       "btc-bip44",
+			Destination: &wallet.Family,
+		}),
+		&cli.StringFlag{
+			Name:  "config",
+			Value: defaultConfigFile,
+		},
+	}
+
+	return &cli.Command{
+		Name:    "create",
+		Aliases: []string{"c"},
+		Usage:   "Create wallet with given mnemonic and path for family",
+		Before:  altsrc.InitInputSourceWithContext(flags, altsrc.NewYamlSourceFromFlagFunc("config")),
+		Flags:   flags,
+		Action:  wallet.createWallet,
+	}
 }
 
 func getKey(mnemonic, path, family string) (key interfaces.Key, err error) {
@@ -37,28 +86,14 @@ func getKey(mnemonic, path, family string) (key interfaces.Key, err error) {
 	return
 }
 
-func NewWallet(mnemonic, path string) (w *Wallet) {
-	return &Wallet{mnemonic, path}
-}
-
-func create(*cli.Context) {
-	conf, err := getConfig()
-	if err != nil {
-		panic(err)
-	}
-
-	wallet := NewWallet(conf.Wallet.Mnemonic, conf.Wallet.Path)
-	wallet.printKeys(conf.Family)
-}
-
-func (w *Wallet) printKeys(family string) {
-	key, err := getKey(w.mnemonic, w.path, family)
+func (w *Wallet) printKeys() {
+	key, err := getKey(w.Mnemonic, w.Path, w.Family)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	log.Infof("mnemonic: %s", w.mnemonic)
-	log.Infof("path: %s", w.path)
+	log.Infof("mnemonic: %s", w.Mnemonic)
+	log.Infof("path: %s", w.Path)
 
 	privKey := key.PrivateKeyString()
 	log.Infof("privKey: %s", privKey)
