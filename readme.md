@@ -4,6 +4,9 @@ This project is aimed to provide a universal HD wallet derivation. Use a single 
 ### Examples
 Examples can be found in [examples](https://github.com/shawn-cx-li/wallet-core/blob/master/examples/demo.go)
 
+### Command Line Tool
+Find doc of cli in [cli](https://github.com/shawn-cx-li/wallet-core/blob/master/cli/readme.md)
+
 ### Sample Result
 To derive private key, public key and address from mnemonic `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` for bitcoin BIP44 specifics
 

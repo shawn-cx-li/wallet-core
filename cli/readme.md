@@ -27,4 +27,13 @@ Create a new wallet with a given/new generated mnemonic and derivation path. Out
     privKey: L4p2b9VAf8k5aUahF1JCJUzZkgNEAqLfq8DDdQiyAprQAKSbu8hf 
     addr: 1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA 
     ```
+    supported Blockchain family options:
+    ```
+    btc-bip44
+    btc-bip44-test
+    btc-bip49
+    btc-bip49-test
+    eth
+    ripple
+    ```
 4. Use `1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA` to receive your Bitcoin. To transfer out fund from the address, import private key `L4p2b9VAf8k5aUahF1JCJUzZkgNEAqLfq8DDdQiyAprQAKSbu8hf` to a third-party app like `Electrum`
